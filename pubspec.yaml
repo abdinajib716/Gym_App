@@ -1,0 +1,56 @@
+name: app_kit
+description: "Reusable Flutter UI Kit Template - Buttons, Colors, Fonts, Widgets"
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management (BLoC for Business Logic, Cubit for Frontend)
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.5
+  dartz: ^0.10.1
+  
+  # Network & Connectivity
+  connectivity_plus: ^7.0.0
+  internet_connection_checker: ^1.0.0+1
+  
+  # Navigation
+  go_router: ^13.0.0
+  
+  # Storage
+  shared_preferences: ^2.5.3
+  
+  # UI Components
+  shimmer: ^3.0.0
+  awesome_dialog: ^3.3.0
+  wolt_modal_sheet: ^0.11.0
+  
+  # Icons
+  cupertino_icons: ^1.0.2
+  iconsax_plus: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  
+  # Fonts - Add your Poppins font files to assets/fonts/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
