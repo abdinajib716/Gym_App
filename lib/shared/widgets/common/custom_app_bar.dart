@@ -33,28 +33,36 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return AppBar(
-      backgroundColor: transparent 
-          ? Colors.transparent 
-          : (backgroundColor ?? (isDark ? AppColors.darkBackground : AppColors.backgroundWhite)),
+      backgroundColor: transparent
+          ? Colors.transparent
+          : (backgroundColor ??
+                (isDark
+                    ? AppColors.darkBackground
+                    : AppColors.backgroundWhite)),
       elevation: elevation,
       centerTitle: centerTitle,
       leading: showBackButton
           ? IconButton(
               icon: Icon(
                 IconsaxPlusLinear.arrow_left,
-                color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
               ),
               onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
             )
           : null,
-      title: titleWidget ??
+      title:
+          titleWidget ??
           (title != null
               ? Text(
                   title!,
                   style: AppTextStyles.h2.copyWith(
-                    color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
                   ),
                 )
               : null),
@@ -71,19 +79,11 @@ class SimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
 
-  const SimpleAppBar({
-    super.key,
-    required this.title,
-    this.actions,
-  });
+  const SimpleAppBar({super.key, required this.title, this.actions});
 
   @override
   Widget build(BuildContext context) {
-    return CustomAppBar(
-      title: title,
-      showBackButton: false,
-      actions: actions,
-    );
+    return CustomAppBar(title: title, showBackButton: false, actions: actions);
   }
 
   @override

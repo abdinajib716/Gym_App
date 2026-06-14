@@ -1,8 +1,8 @@
-/// Shared Widgets Export File
-/// Import this file to access all shared widgets
-/// 
-/// Usage:
-/// import 'package:your_app/shared/widgets/widgets.dart';
+// Shared Widgets Export File
+// Import this file to access all shared widgets.
+//
+// Usage:
+// import 'package:gym_app/shared/widgets/widgets.dart';
 
 // Common Widgets
 export 'common/custom_button.dart';

@@ -9,17 +9,17 @@ abstract class BaseEvent {
 
 /// BaseBloc - Foundation for Business Logic BLoCs
 /// Use this for complex business logic with events
-abstract class BaseBloc<Event extends BaseEvent, State extends BaseState>
-    extends Bloc<Event, State> {
+abstract class BaseBloc<Event extends BaseEvent, TState extends BaseState>
+    extends Bloc<Event, TState> {
   BaseBloc(super.initialState);
 
   /// Execute an async operation with Either result
   Future<void> executeEither<T>({
     required Future<Either<String, T>> Function() operation,
-    required Emitter<State> emit,
-    required State Function() onLoading,
-    required State Function(T data) onSuccess,
-    required State Function(String error) onFailure,
+    required Emitter<TState> emit,
+    required TState Function() onLoading,
+    required TState Function(T data) onSuccess,
+    required TState Function(String error) onFailure,
   }) async {
     emit(onLoading());
 
@@ -34,10 +34,10 @@ abstract class BaseBloc<Event extends BaseEvent, State extends BaseState>
   /// Execute a simple async operation
   Future<void> executeAsync<T>({
     required Future<T> Function() operation,
-    required Emitter<State> emit,
-    required State Function() onLoading,
-    required State Function(T data) onSuccess,
-    required State Function(String error) onFailure,
+    required Emitter<TState> emit,
+    required TState Function() onLoading,
+    required TState Function(T data) onSuccess,
+    required TState Function(String error) onFailure,
   }) async {
     emit(onLoading());
 
@@ -51,43 +51,43 @@ abstract class BaseBloc<Event extends BaseEvent, State extends BaseState>
 }
 
 /// Example: How to create a BLoC for business logic
-/// 
+///
 /// // Events
 /// abstract class UserEvent extends BaseEvent {}
-/// 
+///
 /// class LoadUser extends UserEvent {
 ///   final String userId;
 ///   LoadUser(this.userId);
 /// }
-/// 
+///
 /// class UpdateUser extends UserEvent {
 ///   final User user;
 ///   UpdateUser(this.user);
 /// }
-/// 
+///
 /// // State
 /// class UserState extends BaseState {
 ///   final User? user;
-///   
+///
 ///   const UserState({
 ///     super.status,
 ///     super.errorMessage,
 ///     super.isOffline,
 ///     this.user,
 ///   });
-///   
+///
 ///   UserState copyWith({...}) => UserState(...);
 /// }
-/// 
+///
 /// // BLoC
 /// class UserBloc extends BaseBloc<UserEvent, UserState> {
 ///   final UserRepository _repository;
-///   
+///
 ///   UserBloc(this._repository) : super(const UserState()) {
 ///     on<LoadUser>(_onLoadUser);
 ///     on<UpdateUser>(_onUpdateUser);
 ///   }
-///   
+///
 ///   Future<void> _onLoadUser(LoadUser event, Emitter<UserState> emit) async {
 ///     await executeEither(
 ///       operation: () => _repository.getUser(event.userId),

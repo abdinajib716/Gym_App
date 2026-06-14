@@ -14,13 +14,13 @@ class EmptyState extends StatelessWidget {
   final VoidCallback? onActionPressed;
 
   const EmptyState({
-    Key? key,
+    super.key,
     this.icon = IconsaxPlusLinear.box_1,
     required this.title,
     this.message,
     this.actionText,
     this.onActionPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,29 +34,21 @@ class EmptyState extends StatelessWidget {
             Container(
               width: 100,
               height: 100,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.backgroundLight,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                size: 48,
-                color: AppColors.textSecondary,
-              ),
+              child: Icon(icon, size: 48, color: AppColors.textSecondary),
             ),
-            
+
             const SizedBox(height: DesignTokens.spacing24),
-            
+
             // Title
-            Text(
-              title,
-              style: AppTextStyles.h2,
-              textAlign: TextAlign.center,
-            ),
-            
+            Text(title, style: AppTextStyles.h2, textAlign: TextAlign.center),
+
             if (message != null) ...[
               const SizedBox(height: DesignTokens.spacing12),
-              
+
               // Message
               Text(
                 message!,
@@ -66,17 +58,17 @@ class EmptyState extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ],
-            
+
             if (actionText != null && onActionPressed != null) ...[
               const SizedBox(height: DesignTokens.spacing24),
-              
+
               // Action Button
               ElevatedButton(
                 onPressed: onActionPressed,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryBlue,
                   foregroundColor: AppColors.textWhite,
-                  shape: RoundedRectangleBorder(
+                  shape: const RoundedRectangleBorder(
                     borderRadius: DesignTokens.borderRadiusLarge,
                   ),
                   padding: const EdgeInsets.symmetric(
@@ -84,10 +76,7 @@ class EmptyState extends StatelessWidget {
                     vertical: DesignTokens.spacing12,
                   ),
                 ),
-                child: Text(
-                  actionText!,
-                  style: AppTextStyles.buttonText,
-                ),
+                child: Text(actionText!, style: AppTextStyles.buttonText),
               ),
             ],
           ],

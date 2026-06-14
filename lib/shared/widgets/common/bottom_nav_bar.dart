@@ -21,7 +21,7 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       height: DesignTokens.bottomNavHeight,
       decoration: BoxDecoration(
@@ -57,10 +57,7 @@ class BottomNavItem {
   final IconData icon;
   final String label;
 
-  const BottomNavItem({
-    required this.icon,
-    required this.label,
-  });
+  const BottomNavItem({required this.icon, required this.label});
 }
 
 /// Individual Navigation Item
@@ -85,10 +82,7 @@ class _NavItem extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 8,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -97,7 +91,9 @@ class _NavItem extends StatelessWidget {
               size: 24,
               color: isActive
                   ? AppColors.primaryBlue
-                  : (isDark ? AppColors.darkTextSecondary : AppColors.textSecondary),
+                  : (isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary),
             ),
             const SizedBox(height: 4),
             Text(
@@ -105,7 +101,9 @@ class _NavItem extends StatelessWidget {
               style: AppTextStyles.caption.copyWith(
                 color: isActive
                     ? AppColors.primaryBlue
-                    : (isDark ? AppColors.darkTextSecondary : AppColors.textSecondary),
+                    : (isDark
+                          ? AppColors.darkTextSecondary
+                          : AppColors.textSecondary),
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                 fontSize: 11,
               ),

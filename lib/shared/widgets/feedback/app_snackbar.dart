@@ -16,11 +16,7 @@ class AppSnackBar {
     final snackBar = SnackBar(
       content: Row(
         children: [
-          Icon(
-            _getIcon(type),
-            color: Colors.white,
-            size: 20,
-          ),
+          Icon(_getIcon(type), color: Colors.white, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

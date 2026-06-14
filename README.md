@@ -1,4 +1,4 @@
-# app_kit
+# gym_app
 
 # Flutter UI Kit Template
 
@@ -54,7 +54,7 @@ lib/
 Copy the `lib/core/` and `lib/shared/` folders to your new project.
 
 ### 2. Update package name
-Replace `flutter_ui_kit_template` with your app package name in all files.
+Replace `gym_app` with your app package name in all files.
 
 ### 3. Add dependencies to pubspec.yaml
 ```yaml
@@ -76,7 +76,7 @@ dependencies:
   shimmer: ^3.0.0
   awesome_dialog: ^3.3.0
   wolt_modal_sheet: ^0.11.0
-  iconsax: ^0.0.8
+  iconsax_plus: ^1.0.0
 ```
 
 ### 4. Add Poppins font files
@@ -85,10 +85,10 @@ Download Poppins font and add to `assets/fonts/`
 ### 5. Import and use
 ```dart
 // Import core utilities
-import 'package:your_app/core/core.dart';
+import 'package:gym_app/core/core.dart';
 
 // Import widgets
-import 'package:your_app/shared/widgets/widgets.dart';
+import 'package:gym_app/shared/widgets/widgets.dart';
 
 // Use widgets
 CustomButton(

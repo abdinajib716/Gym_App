@@ -21,10 +21,7 @@ class AppModalSheet {
         return [
           WoltModalSheetPage(
             hasSabGradient: false,
-            topBarTitle: Text(
-              title,
-              style: AppTextStyles.h2,
-            ),
+            topBarTitle: Text(title, style: AppTextStyles.h2),
             isTopBarLayerAlwaysVisible: true,
             leadingNavBarWidget: showCloseButton
                 ? IconButton(
@@ -86,10 +83,7 @@ class AppModalSheet {
         return [
           WoltModalSheetPage(
             hasSabGradient: false,
-            topBarTitle: Text(
-              title,
-              style: AppTextStyles.h2,
-            ),
+            topBarTitle: Text(title, style: AppTextStyles.h2),
             isTopBarLayerAlwaysVisible: true,
             leadingNavBarWidget: showCloseButton
                 ? IconButton(

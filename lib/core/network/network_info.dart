@@ -7,13 +7,13 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 abstract class NetworkInfo {
   /// Check if device has internet connection
   Future<bool> get isConnected;
-  
+
   /// Stream of connectivity changes
   Stream<bool> get onConnectivityChanged;
-  
+
   /// Get current connectivity type
   Future<List<ConnectivityResult>> get connectivityResult;
-  
+
   /// Dispose resources
   void dispose();
 }
@@ -23,46 +23,44 @@ abstract class NetworkInfo {
 class NetworkInfoImpl implements NetworkInfo {
   final Connectivity _connectivity;
   final InternetConnectionChecker _connectionChecker;
-  
+
   StreamController<bool>? _connectivityController;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   StreamSubscription<InternetConnectionStatus>? _internetSubscription;
-  
+
   bool _lastKnownStatus = true;
 
   NetworkInfoImpl({
     Connectivity? connectivity,
     InternetConnectionChecker? connectionChecker,
-  })  : _connectivity = connectivity ?? Connectivity(),
-        _connectionChecker = connectionChecker ?? InternetConnectionChecker() {
+  }) : _connectivity = connectivity ?? Connectivity(),
+       _connectionChecker = connectionChecker ?? InternetConnectionChecker() {
     _initConnectivityStream();
   }
 
   void _initConnectivityStream() {
     _connectivityController = StreamController<bool>.broadcast();
-    
+
     // Listen to connectivity changes (WiFi, Mobile, None)
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
-      (results) async {
-        // Check actual internet when connectivity changes
-        final hasInternet = await _checkActualInternet(results);
-        if (hasInternet != _lastKnownStatus) {
-          _lastKnownStatus = hasInternet;
-          _connectivityController?.add(hasInternet);
-        }
-      },
-    );
-    
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen((
+      results,
+    ) async {
+      // Check actual internet when connectivity changes
+      final hasInternet = await _checkActualInternet(results);
+      if (hasInternet != _lastKnownStatus) {
+        _lastKnownStatus = hasInternet;
+        _connectivityController?.add(hasInternet);
+      }
+    });
+
     // Also listen to internet checker for more accurate status
-    _internetSubscription = _connectionChecker.onStatusChange.listen(
-      (status) {
-        final hasInternet = status == InternetConnectionStatus.connected;
-        if (hasInternet != _lastKnownStatus) {
-          _lastKnownStatus = hasInternet;
-          _connectivityController?.add(hasInternet);
-        }
-      },
-    );
+    _internetSubscription = _connectionChecker.onStatusChange.listen((status) {
+      final hasInternet = status == InternetConnectionStatus.connected;
+      if (hasInternet != _lastKnownStatus) {
+        _lastKnownStatus = hasInternet;
+        _connectivityController?.add(hasInternet);
+      }
+    });
   }
 
   Future<bool> _checkActualInternet(List<ConnectivityResult> results) async {
@@ -70,7 +68,7 @@ class NetworkInfoImpl implements NetworkInfo {
     if (results.contains(ConnectivityResult.none) || results.isEmpty) {
       return false;
     }
-    
+
     // Check actual internet connectivity
     return await _connectionChecker.hasConnection;
   }
@@ -100,13 +98,7 @@ class NetworkInfoImpl implements NetworkInfo {
 }
 
 /// Connection Type Helper
-enum ConnectionType {
-  wifi,
-  mobile,
-  ethernet,
-  none,
-  unknown,
-}
+enum ConnectionType { wifi, mobile, ethernet, none, unknown }
 
 /// Extension to get ConnectionType from ConnectivityResult
 extension ConnectivityResultExtension on List<ConnectivityResult> {

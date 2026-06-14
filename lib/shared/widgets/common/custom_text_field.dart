@@ -28,7 +28,7 @@ class CustomTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.labelText,
     this.hintText,
@@ -47,7 +47,7 @@ class CustomTextField extends StatefulWidget {
     this.onSubmitted,
     this.focusNode,
     this.textInputAction,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -117,36 +117,27 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   )
                 : null,
             suffixIcon: _buildSuffixIcon(),
-            border: OutlineInputBorder(
+            border: const OutlineInputBorder(
               borderRadius: DesignTokens.borderRadiusLarge,
               borderSide: BorderSide.none,
             ),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
               borderRadius: DesignTokens.borderRadiusLarge,
               borderSide: BorderSide.none,
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: const OutlineInputBorder(
               borderRadius: DesignTokens.borderRadiusLarge,
-              borderSide: const BorderSide(
-                color: AppColors.primaryBlue,
-                width: 2,
-              ),
+              borderSide: BorderSide(color: AppColors.primaryBlue, width: 2),
             ),
-            errorBorder: OutlineInputBorder(
+            errorBorder: const OutlineInputBorder(
               borderRadius: DesignTokens.borderRadiusLarge,
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 2,
-              ),
+              borderSide: BorderSide(color: AppColors.error, width: 2),
             ),
-            focusedErrorBorder: OutlineInputBorder(
+            focusedErrorBorder: const OutlineInputBorder(
               borderRadius: DesignTokens.borderRadiusLarge,
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 2,
-              ),
+              borderSide: BorderSide(color: AppColors.error, width: 2),
             ),
-            disabledBorder: OutlineInputBorder(
+            disabledBorder: const OutlineInputBorder(
               borderRadius: DesignTokens.borderRadiusLarge,
               borderSide: BorderSide.none,
             ),
@@ -199,13 +190,13 @@ class SearchTextField extends StatelessWidget {
   final VoidCallback? onFilterTap;
 
   const SearchTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.hintText = 'Search...',
     this.onChanged,
     this.onSubmitted,
     this.onFilterTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

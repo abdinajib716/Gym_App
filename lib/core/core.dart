@@ -1,8 +1,8 @@
-/// Core Exports
-/// Import this file to access all core utilities
-/// 
-/// Usage:
-import 'package:app_kit/core/core.dart';
+// Core Exports
+// Import this file to access all core utilities.
+//
+// Usage:
+// import 'package:gym_app/core/core.dart';
 
 // Constants
 export 'constants/app_colors.dart';

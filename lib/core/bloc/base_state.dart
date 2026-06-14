@@ -6,8 +6,8 @@ enum StateStatus {
   loading,
   success,
   failure,
-  loadingMore,  // For pagination
-  refreshing,   // For pull-to-refresh
+  loadingMore, // For pagination
+  refreshing, // For pull-to-refresh
 }
 
 /// BaseState - Foundation for all BLoC/Cubit states
@@ -108,10 +108,10 @@ class PaginatedState<T> extends BaseState {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        items,
-        currentPage,
-        hasReachedMax,
-        totalItems,
-      ];
+    ...super.props,
+    items,
+    currentPage,
+    hasReachedMax,
+    totalItems,
+  ];
 }

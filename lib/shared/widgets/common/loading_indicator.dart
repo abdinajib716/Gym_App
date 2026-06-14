@@ -8,11 +8,7 @@ class LoadingIndicator extends StatelessWidget {
   final double size;
   final Color? color;
 
-  const LoadingIndicator({
-    Key? key,
-    this.size = 40,
-    this.color,
-  }) : super(key: key);
+  const LoadingIndicator({super.key, this.size = 40, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +45,7 @@ class ShimmerSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Shimmer.fromColors(
       baseColor: isDark ? AppColors.darkSurface : Colors.grey[300]!,
       highlightColor: isDark ? AppColors.darkCard : Colors.grey[100]!,
@@ -83,7 +79,7 @@ class ShimmerBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Shimmer.fromColors(
       baseColor: isDark ? AppColors.darkSurface : Colors.grey[300]!,
       highlightColor: isDark ? AppColors.darkCard : Colors.grey[100]!,
@@ -104,15 +100,12 @@ class ShimmerBox extends StatelessWidget {
 class ShimmerCircle extends StatelessWidget {
   final double size;
 
-  const ShimmerCircle({
-    super.key,
-    required this.size,
-  });
+  const ShimmerCircle({super.key, required this.size});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Shimmer.fromColors(
       baseColor: isDark ? AppColors.darkSurface : Colors.grey[300]!,
       highlightColor: isDark ? AppColors.darkCard : Colors.grey[100]!,

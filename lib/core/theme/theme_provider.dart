@@ -3,16 +3,12 @@ import 'package:flutter/scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Theme Mode Options
-enum AppThemeMode {
-  system,
-  light,
-  dark,
-}
+enum AppThemeMode { system, light, dark }
 
 /// ThemeProvider - Manages app theme state with persistence
 class ThemeProvider extends ChangeNotifier {
   static const String _themeKey = 'app_theme_mode';
-  
+
   AppThemeMode _themeMode = AppThemeMode.system;
   late SharedPreferences _prefs;
   bool _isInitialized = false;
@@ -84,7 +80,8 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   bool _isSystemDarkMode() {
-    final brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    final brightness =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness;
     return brightness == Brightness.dark;
   }
 

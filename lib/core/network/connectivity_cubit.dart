@@ -37,12 +37,12 @@ class ConnectivityState extends Equatable {
 
   @override
   List<Object?> get props => [
-        isConnected,
-        isInitialized,
-        connectionType,
-        lastOnlineTime,
-        showOfflineBanner,
-      ];
+    isConnected,
+    isInitialized,
+    connectionType,
+    lastOnlineTime,
+    showOfflineBanner,
+  ];
 }
 
 /// ConnectivityCubit - Frontend Cubit for Connectivity UI
@@ -53,8 +53,8 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
   Timer? _bannerDismissTimer;
 
   ConnectivityCubit({required NetworkInfo networkInfo})
-      : _networkInfo = networkInfo,
-        super(const ConnectivityState()) {
+    : _networkInfo = networkInfo,
+      super(const ConnectivityState()) {
     _init();
   }
 
@@ -62,14 +62,16 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
     // Check initial connectivity
     final isConnected = await _networkInfo.isConnected;
     final results = await _networkInfo.connectivityResult;
-    
-    emit(state.copyWith(
-      isConnected: isConnected,
-      isInitialized: true,
-      connectionType: results.connectionType,
-      lastOnlineTime: isConnected ? DateTime.now() : null,
-      showOfflineBanner: !isConnected,
-    ));
+
+    emit(
+      state.copyWith(
+        isConnected: isConnected,
+        isInitialized: true,
+        connectionType: results.connectionType,
+        lastOnlineTime: isConnected ? DateTime.now() : null,
+        showOfflineBanner: !isConnected,
+      ),
+    );
 
     // Listen to connectivity changes
     _connectivitySubscription = _networkInfo.onConnectivityChanged.listen(
@@ -79,26 +81,29 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
 
   void _onConnectivityChanged(bool isConnected) async {
     final results = await _networkInfo.connectivityResult;
-    
+
     if (isConnected && !state.isConnected) {
       // Coming back online
-      emit(state.copyWith(
-        isConnected: true,
-        connectionType: results.connectionType,
-        lastOnlineTime: DateTime.now(),
-        showOfflineBanner: false,
-      ));
-      
+      emit(
+        state.copyWith(
+          isConnected: true,
+          connectionType: results.connectionType,
+          lastOnlineTime: DateTime.now(),
+          showOfflineBanner: false,
+        ),
+      );
+
       // Optionally show "Back online" message briefly
       _showTemporaryOnlineBanner();
-      
     } else if (!isConnected && state.isConnected) {
       // Going offline
-      emit(state.copyWith(
-        isConnected: false,
-        connectionType: ConnectionType.none,
-        showOfflineBanner: true,
-      ));
+      emit(
+        state.copyWith(
+          isConnected: false,
+          connectionType: ConnectionType.none,
+          showOfflineBanner: true,
+        ),
+      );
     }
   }
 
@@ -114,12 +119,14 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
   Future<void> checkConnectivity() async {
     final isConnected = await _networkInfo.isConnected;
     final results = await _networkInfo.connectivityResult;
-    
-    emit(state.copyWith(
-      isConnected: isConnected,
-      connectionType: results.connectionType,
-      showOfflineBanner: !isConnected,
-    ));
+
+    emit(
+      state.copyWith(
+        isConnected: isConnected,
+        connectionType: results.connectionType,
+        showOfflineBanner: !isConnected,
+      ),
+    );
   }
 
   /// Dismiss offline banner manually

@@ -13,12 +13,12 @@ class ErrorView extends StatelessWidget {
   final IconData icon;
 
   const ErrorView({
-    Key? key,
+    super.key,
     required this.message,
     this.title,
     this.onRetry,
     this.icon = IconsaxPlusLinear.danger,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,24 +36,20 @@ class ErrorView extends StatelessWidget {
                 color: AppColors.error.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                size: 48,
-                color: AppColors.error,
-              ),
+              child: Icon(icon, size: 48, color: AppColors.error),
             ),
-            
+
             const SizedBox(height: DesignTokens.spacing24),
-            
+
             // Title
             Text(
               title ?? 'Oops! Something went wrong',
               style: AppTextStyles.h2,
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: DesignTokens.spacing12),
-            
+
             // Error Message
             Text(
               message,
@@ -62,10 +58,10 @@ class ErrorView extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             if (onRetry != null) ...[
               const SizedBox(height: DesignTokens.spacing24),
-              
+
               // Retry Button
               ElevatedButton.icon(
                 onPressed: onRetry,
@@ -74,7 +70,7 @@ class ErrorView extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryBlue,
                   foregroundColor: AppColors.textWhite,
-                  shape: RoundedRectangleBorder(
+                  shape: const RoundedRectangleBorder(
                     borderRadius: DesignTokens.borderRadiusLarge,
                   ),
                   padding: const EdgeInsets.symmetric(

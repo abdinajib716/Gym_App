@@ -6,7 +6,7 @@ import '../../../core/constants/app_constants.dart';
 
 /// CustomButton Widget
 /// Reusable button with primary, secondary, and outline variants
-/// 
+///
 /// Uses [IconsaxPlusLinear] for high-quality icons. Example:
 /// ```dart
 /// CustomButton(
@@ -50,22 +50,17 @@ class CustomButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: DesignTokens.borderRadiusLarge,
             side: type == ButtonType.outline
-                ? const BorderSide(
-                    color: AppColors.primaryBlue,
-                    width: 1.5,
-                  )
+                ? const BorderSide(color: AppColors.primaryBlue, width: 1.5)
                 : BorderSide.none,
           ),
           padding: EdgeInsets.symmetric(
             horizontal: DesignTokens.spacing16,
-            vertical: size == ButtonSize.small 
-                ? DesignTokens.spacing8 
+            vertical: size == ButtonSize.small
+                ? DesignTokens.spacing8
                 : DesignTokens.spacing12,
           ),
         ),
-        child: isLoading
-            ? _buildLoadingIndicator()
-            : _buildButtonContent(),
+        child: isLoading ? _buildLoadingIndicator() : _buildButtonContent(),
       ),
     );
   }
@@ -131,9 +126,7 @@ class CustomButton extends StatelessWidget {
           const SizedBox(width: DesignTokens.spacing8),
           Text(
             text,
-            style: AppTextStyles.buttonText.copyWith(
-              color: _getTextColor(),
-            ),
+            style: AppTextStyles.buttonText.copyWith(color: _getTextColor()),
           ),
         ],
       );
@@ -141,21 +134,11 @@ class CustomButton extends StatelessWidget {
 
     return Text(
       text,
-      style: AppTextStyles.buttonText.copyWith(
-        color: _getTextColor(),
-      ),
+      style: AppTextStyles.buttonText.copyWith(color: _getTextColor()),
     );
   }
 }
 
-enum ButtonType {
-  primary,
-  secondary,
-  outline,
-}
+enum ButtonType { primary, secondary, outline }
 
-enum ButtonSize {
-  small,
-  medium,
-  large,
-}
+enum ButtonSize { small, medium, large }

@@ -1,5 +1,5 @@
-name: app_kit
-description: "Reusable Flutter UI Kit Template - Buttons, Colors, Fonts, Widgets"
+name: gym_app
+description: "Gym app for members and trainers"
 publish_to: 'none'
 version: 1.0.0
 
@@ -18,12 +18,14 @@ dependencies:
   # Network & Connectivity
   connectivity_plus: ^7.0.0
   internet_connection_checker: ^1.0.0+1
+  http: ^1.2.2
   
   # Navigation
   go_router: ^13.0.0
   
   # Storage
   shared_preferences: ^2.5.3
+  flutter_secure_storage: ^9.2.2
   
   # UI Components
   shimmer: ^3.0.0
