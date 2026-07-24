@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
-import '../../../core/constants/app_constants.dart';
 
 /// BottomNavBar Widget
 /// Reusable bottom navigation bar - customize items as needed
@@ -21,9 +20,13 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bottomInset = MediaQuery.viewPaddingOf(context).bottom;
+    final bottomPadding = bottomInset + 12;
+    const topPadding = 8.0;
+    const contentHeight = 58.0;
 
     return Container(
-      height: DesignTokens.bottomNavHeight,
+      height: contentHeight + topPadding + bottomPadding,
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkBackground : Colors.white,
         border: Border(
@@ -33,17 +36,19 @@ class BottomNavBar extends StatelessWidget {
           ),
         ),
       ),
-      child: SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(
             items.length,
-            (index) => _NavItem(
-              icon: items[index].icon,
-              label: items[index].label,
-              isActive: currentIndex == index,
-              isDark: isDark,
-              onTap: () => onTap(index),
+            (index) => Expanded(
+              child: _NavItem(
+                icon: items[index].icon,
+                label: items[index].label,
+                isActive: currentIndex == index,
+                isDark: isDark,
+                onTap: () => onTap(index),
+              ),
             ),
           ),
         ),
@@ -82,7 +87,8 @@ class _NavItem extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -98,6 +104,9 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: AppTextStyles.caption.copyWith(
                 color: isActive
                     ? AppColors.primaryBlue
@@ -105,7 +114,7 @@ class _NavItem extends StatelessWidget {
                           ? AppColors.darkTextSecondary
                           : AppColors.textSecondary),
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                fontSize: 11,
+                fontSize: 10,
               ),
             ),
           ],

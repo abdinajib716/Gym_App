@@ -6,7 +6,7 @@ class AppConstants {
   AppConstants._();
 
   // App Info - Change for your app
-  static const String appName = 'My App';
+  static const String appName = 'GymMester';
   static const String appVersion = '1.0.0';
 
   // Animation Durations

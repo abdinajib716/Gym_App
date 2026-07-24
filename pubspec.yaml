@@ -1,5 +1,5 @@
 name: gym_app
-description: "Gym app for members and trainers"
+description: "GymMester mobile app for members and trainers"
 publish_to: 'none'
 version: 1.0.0
 
@@ -31,18 +31,38 @@ dependencies:
   shimmer: ^3.0.0
   awesome_dialog: ^3.3.0
   wolt_modal_sheet: ^0.11.0
+  fluttertoast: ^8.2.8
   
   # Icons
   cupertino_icons: ^1.0.2
   iconsax_plus: ^1.0.0
 
+  # Media
+  image_picker: ^1.1.2
+  firebase_core: ^4.11.0
+  firebase_messaging: ^16.4.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/appicon_launcher.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/appicon_launcher.png"
+  remove_alpha_ios: true
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/appicon.png
+    - assets/images/appicon_launcher.png
+    - assets/images/gymmester logo.png
   
   # Fonts - Add your Poppins font files to assets/fonts/
   fonts:

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/api/api_exception.dart';
 import '../../../core/storage/session_storage.dart';
+import '../../shared/data/mobile_device_token_api.dart';
 import '../../shared/models/mobile_user.dart';
 import '../data/auth_service.dart';
 
@@ -11,11 +12,14 @@ class AuthController extends ChangeNotifier {
   AuthController({
     required AuthService authService,
     required SessionStorage storage,
+    MobileDeviceTokenRegistrar? deviceTokenRegistrar,
   }) : _authService = authService,
-       _storage = storage;
+       _storage = storage,
+       _deviceTokenRegistrar = deviceTokenRegistrar;
 
   final AuthService _authService;
   final SessionStorage _storage;
+  final MobileDeviceTokenRegistrar? _deviceTokenRegistrar;
 
   AuthStatus status = AuthStatus.booting;
   MobileUser? user;
@@ -40,9 +44,10 @@ class AuthController extends ChangeNotifier {
     user = cachedUser;
     status = AuthStatus.signedIn;
     notifyListeners();
+    await _registerDeviceToken();
 
     try {
-      final refreshedUser = await _authService.me();
+      final refreshedUser = await _authService.me(cachedUser.role);
       user = refreshedUser;
       await _storage.saveUser(refreshedUser);
       notifyListeners();
@@ -66,6 +71,7 @@ class AuthController extends ChangeNotifier {
       );
       user = result.user;
       await _storage.saveSession(token: result.token, user: result.user);
+      await _registerDeviceToken();
       status = AuthStatus.signedIn;
       return true;
     } on ApiException catch (error) {
@@ -81,7 +87,8 @@ class AuthController extends ChangeNotifier {
     isBusy = true;
     notifyListeners();
     try {
-      await _authService.logout();
+      await _removeDeviceToken();
+      await _authService.logout(user?.role ?? MobileRole.member);
     } catch (_) {
       // Local logout should always succeed.
     }
@@ -91,5 +98,31 @@ class AuthController extends ChangeNotifier {
     status = AuthStatus.signedOut;
     isBusy = false;
     notifyListeners();
+  }
+
+  Future<void> markPasswordChanged() async {
+    final currentUser = user;
+    if (currentUser == null) return;
+
+    final updatedUser = currentUser.copyWith(mustChangePassword: false);
+    user = updatedUser;
+    await _storage.saveUser(updatedUser);
+    notifyListeners();
+  }
+
+  Future<void> _registerDeviceToken() async {
+    try {
+      await _deviceTokenRegistrar?.registerCurrentDevice();
+    } catch (_) {
+      // Push registration should not block sign-in.
+    }
+  }
+
+  Future<void> _removeDeviceToken() async {
+    try {
+      await _deviceTokenRegistrar?.removeCurrentDevice();
+    } catch (_) {
+      // Local logout should not be blocked by push cleanup.
+    }
   }
 }

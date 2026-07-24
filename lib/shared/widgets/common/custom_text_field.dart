@@ -64,15 +64,27 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark
+        ? AppColors.darkTextPrimary
+        : AppColors.textPrimary;
+    final hintColor = isDark
+        ? AppColors.darkTextSecondary
+        : AppColors.textSecondary;
+    final fillColor = isDark
+        ? AppColors.darkSurface
+        : AppColors.backgroundLight;
+    final disabledFillColor = isDark
+        ? AppColors.darkSurface.withValues(alpha: 0.55)
+        : AppColors.backgroundLight.withValues(alpha: 0.5);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.labelText != null) ...[
           Text(
             widget.labelText!,
-            style: AppTextStyles.labelMedium.copyWith(
-              color: AppColors.textPrimary,
-            ),
+            style: AppTextStyles.labelMedium.copyWith(color: textColor),
           ),
           const SizedBox(height: DesignTokens.spacing8),
         ],
@@ -89,22 +101,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
           onChanged: widget.onChanged,
           onFieldSubmitted: widget.onSubmitted,
           textInputAction: widget.textInputAction,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.textPrimary,
-          ),
+          style: AppTextStyles.bodyMedium.copyWith(color: textColor),
           decoration: InputDecoration(
             hintText: widget.hintText,
-            hintStyle: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textSecondary,
-            ),
+            hintStyle: AppTextStyles.bodyMedium.copyWith(color: hintColor),
             errorText: widget.errorText,
             errorStyle: AppTextStyles.bodySmall.copyWith(
               color: AppColors.error,
             ),
             filled: true,
-            fillColor: widget.enabled
-                ? AppColors.backgroundLight
-                : AppColors.backgroundLight.withValues(alpha: 0.5),
+            fillColor: widget.enabled ? fillColor : disabledFillColor,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: DesignTokens.spacing16,
               vertical: DesignTokens.spacing16,
@@ -112,7 +118,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             prefixIcon: widget.prefixIcon != null
                 ? Icon(
                     widget.prefixIcon,
-                    color: AppColors.textSecondary,
+                    color: hintColor,
                     size: DesignTokens.iconSizeMedium,
                   )
                 : null,
@@ -148,12 +154,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   Widget? _buildSuffixIcon() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconColor = isDark
+        ? AppColors.darkTextSecondary
+        : AppColors.textSecondary;
+
     // Password visibility toggle
     if (widget.obscureText) {
       return IconButton(
         icon: Icon(
           _obscureText ? IconsaxPlusLinear.eye_slash : IconsaxPlusLinear.eye,
-          color: AppColors.textSecondary,
+          color: iconColor,
           size: DesignTokens.iconSizeMedium,
         ),
         onPressed: () {
@@ -169,7 +180,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       return IconButton(
         icon: Icon(
           widget.suffixIcon,
-          color: AppColors.textSecondary,
+          color: iconColor,
           size: DesignTokens.iconSizeMedium,
         ),
         onPressed: widget.onSuffixIconTap,

@@ -13,6 +13,8 @@ export 'common/error_view.dart';
 export 'common/custom_app_bar.dart';
 export 'common/bottom_nav_bar.dart';
 export 'common/connectivity_status_widget.dart';
+export 'common/brand_logo.dart';
+export 'common/app_remote_image.dart';
 
 // Feedback Widgets
 export 'feedback/app_snackbar.dart';

@@ -8,10 +8,16 @@ import '../features/auth/data/auth_service.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/state/auth_controller.dart';
 import '../features/member/data/member_api.dart';
-import '../features/member/presentation/member_home_screen.dart';
-import '../features/shared/models/mobile_user.dart';
-import '../features/trainer/presentation/trainer_home_screen.dart';
+import '../features/shared/data/firebase_device_token_provider.dart';
+import '../features/shared/data/mobile_device_token_api.dart';
+import '../features/shared/presentation/mobile_home_shell.dart';
+import '../features/shared/presentation/splash_screen.dart';
+import '../features/trainer/data/trainer_api.dart';
 import '../shared/widgets/widgets.dart';
+
+const _mobileDeviceTokenOverride = String.fromEnvironment(
+  'MOBILE_DEVICE_TOKEN',
+);
 
 class GymMobileApp extends StatefulWidget {
   const GymMobileApp({
@@ -28,11 +34,18 @@ class GymMobileApp extends StatefulWidget {
 }
 
 class _GymMobileAppState extends State<GymMobileApp> {
+  static const _minimumSplashDuration = Duration(milliseconds: 1600);
+
   late final SessionStorage _storage;
   late final ApiClient _apiClient;
   late final AuthService _authService;
   late final AuthController _authController;
   late final MemberApi _memberApi;
+  late final TrainerApi _trainerApi;
+  late final MobileDeviceTokenApi _deviceTokenApi;
+  late final MobileDeviceTokenRegistrar _deviceTokenRegistrar;
+  late final FirebaseDeviceTokenProvider _firebaseDeviceTokenProvider;
+  bool _showSplash = true;
 
   @override
   void initState() {
@@ -40,12 +53,26 @@ class _GymMobileAppState extends State<GymMobileApp> {
     _storage = SessionStorage();
     _apiClient = ApiClient(tokenProvider: _storage.readToken);
     _authService = AuthService(_apiClient);
+    _deviceTokenApi = MobileDeviceTokenApi(_apiClient);
+    _firebaseDeviceTokenProvider = const FirebaseDeviceTokenProvider(
+      overrideToken: _mobileDeviceTokenOverride,
+    );
+    _deviceTokenRegistrar = MobileDeviceTokenRegistrar(
+      api: _deviceTokenApi,
+      tokenProvider: _firebaseDeviceTokenProvider.readToken,
+    );
     _authController = AuthController(
       authService: _authService,
       storage: _storage,
+      deviceTokenRegistrar: _deviceTokenRegistrar,
     );
     _memberApi = MemberApi(_apiClient);
+    _trainerApi = TrainerApi(_apiClient);
     _authController.restore();
+    Future<void>.delayed(_minimumSplashDuration, () {
+      if (!mounted) return;
+      setState(() => _showSplash = false);
+    });
   }
 
   @override
@@ -62,7 +89,7 @@ class _GymMobileAppState extends State<GymMobileApp> {
         listenable: Listenable.merge([widget.themeProvider, _authController]),
         builder: (context, _) {
           return MaterialApp(
-            title: 'Gym App',
+            title: BrandLogo.appName,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
@@ -80,8 +107,8 @@ class _GymMobileAppState extends State<GymMobileApp> {
   }
 
   Widget _buildHome() {
-    if (_authController.status == AuthStatus.booting) {
-      return const Scaffold(body: Center(child: LoadingIndicator(size: 36)));
+    if (_showSplash || _authController.status == AuthStatus.booting) {
+      return const SplashScreen();
     }
 
     if (_authController.status == AuthStatus.signedOut) {
@@ -91,14 +118,10 @@ class _GymMobileAppState extends State<GymMobileApp> {
       );
     }
 
-    final user = _authController.user;
-    if (user?.role == MobileRole.trainer) {
-      return TrainerHomeScreen(authController: _authController);
-    }
-
-    return MemberHomeScreen(
+    return MobileHomeShell(
       authController: _authController,
       memberApi: _memberApi,
+      trainerApi: _trainerApi,
     );
   }
 }

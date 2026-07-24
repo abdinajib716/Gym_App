@@ -10,6 +10,7 @@ class MobileUser {
     required this.mustChangePassword,
     this.email,
     this.phone,
+    this.profileImage,
   });
 
   final String id;
@@ -18,6 +19,7 @@ class MobileUser {
   final String name;
   final String? email;
   final String? phone;
+  final String? profileImage;
   final String accountStatus;
   final bool mustChangePassword;
 
@@ -29,8 +31,30 @@ class MobileUser {
       name: json['name']?.toString() ?? json['fullName']?.toString() ?? '',
       email: json['email']?.toString(),
       phone: json['phone']?.toString() ?? json['phoneNumber']?.toString(),
+      profileImage: json['profileImage']?.toString(),
       accountStatus: json['accountStatus']?.toString() ?? '',
       mustChangePassword: json['mustChangePassword'] == true,
+    );
+  }
+
+  factory MobileUser.trainerFromJson(
+    Map<String, dynamic> json, {
+    String? accountId,
+    String? accountStatus,
+    bool mustChangePassword = false,
+  }) {
+    return MobileUser(
+      id: json['id']?.toString() ?? '',
+      accountId: accountId ?? json['accountId']?.toString() ?? '',
+      role: MobileRole.trainer,
+      name: json['name']?.toString() ?? json['fullName']?.toString() ?? '',
+      email: json['email']?.toString(),
+      phone: json['phone']?.toString() ?? json['phoneNumber']?.toString(),
+      profileImage: json['profileImage']?.toString(),
+      accountStatus:
+          accountStatus ?? json['accountStatus']?.toString() ?? 'ACTIVE',
+      mustChangePassword:
+          mustChangePassword || json['mustChangePassword'] == true,
     );
   }
 
@@ -42,9 +66,34 @@ class MobileUser {
       'name': name,
       'email': email,
       'phone': phone,
+      'profileImage': profileImage,
       'accountStatus': accountStatus,
       'mustChangePassword': mustChangePassword,
     };
+  }
+
+  MobileUser copyWith({
+    String? id,
+    String? accountId,
+    MobileRole? role,
+    String? name,
+    String? email,
+    String? phone,
+    String? profileImage,
+    String? accountStatus,
+    bool? mustChangePassword,
+  }) {
+    return MobileUser(
+      id: id ?? this.id,
+      accountId: accountId ?? this.accountId,
+      role: role ?? this.role,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      profileImage: profileImage ?? this.profileImage,
+      accountStatus: accountStatus ?? this.accountStatus,
+      mustChangePassword: mustChangePassword ?? this.mustChangePassword,
+    );
   }
 
   static MobileRole _parseRole(String? role) {

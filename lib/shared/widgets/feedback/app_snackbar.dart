@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../core/core.dart';
 
 enum SnackBarType { success, error, warning, info }
@@ -13,32 +15,19 @@ class AppSnackBar {
     Duration duration = const Duration(seconds: 3),
     SnackBarAction? action,
   }) {
-    final snackBar = SnackBar(
-      content: Row(
-        children: [
-          Icon(_getIcon(type), color: Colors.white, size: 20),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              message,
-              style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
+    HapticFeedback.selectionClick();
+    Fluttertoast.cancel();
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: duration.inSeconds > 3
+          ? Toast.LENGTH_LONG
+          : Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: duration.inSeconds.clamp(1, 5),
       backgroundColor: _getColor(type),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(DesignTokens.radiusMedium),
-      ),
-      margin: const EdgeInsets.all(DesignTokens.screenPadding),
-      duration: duration,
-      action: action,
+      textColor: Colors.white,
+      fontSize: 15,
     );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
   }
 
   static void success(BuildContext context, String message) {
@@ -67,19 +56,6 @@ class AppSnackBar {
         return AppColors.warning;
       case SnackBarType.info:
         return AppColors.primaryBlue;
-    }
-  }
-
-  static IconData _getIcon(SnackBarType type) {
-    switch (type) {
-      case SnackBarType.success:
-        return Icons.check_circle_outline;
-      case SnackBarType.error:
-        return Icons.error_outline;
-      case SnackBarType.warning:
-        return Icons.warning_amber_outlined;
-      case SnackBarType.info:
-        return Icons.info_outline;
     }
   }
 }

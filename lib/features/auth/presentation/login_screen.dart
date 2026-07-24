@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
 import '../../../core/api/api_exception.dart';
-import '../../../core/config/app_config.dart';
 import '../../../core/core.dart';
 import '../../../shared/widgets/widgets.dart';
 import '../data/auth_service.dart';
@@ -64,32 +63,15 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primaryBlue,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      IconsaxPlusLinear.activity,
-                      color: AppColors.textWhite,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text('Gym App', style: AppTextStyles.h1),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Sign in with your member or trainer account.',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppConfig.apiBaseUrl,
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.textSecondary,
+                  const Center(child: BrandLogo(height: 74)),
+                  const SizedBox(height: 18),
+                  Center(
+                    child: Text(
+                      'Sign in with your mobile account.',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 28),
@@ -121,9 +103,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _login,
                   ),
                   const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: _openPasswordHelp,
-                    child: const Text('Forgot or reset password'),
+                  Center(
+                    child: TextButton(
+                      onPressed: _openPasswordHelp,
+                      child: const Text('Forgot or reset password'),
+                    ),
                   ),
                 ],
               ),

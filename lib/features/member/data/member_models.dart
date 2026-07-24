@@ -1,3 +1,5 @@
+import '../../training/data/training_models.dart';
+
 double _toDouble(dynamic value) {
   if (value is num) return value.toDouble();
   return double.tryParse(value?.toString() ?? '') ?? 0;
@@ -17,12 +19,24 @@ class MemberProfile {
     required this.status,
     this.phoneNumber,
     this.email,
+    this.gender,
+    this.address,
+    this.dateOfBirth,
+    this.emergencyContact,
+    this.profileImage,
+    this.account,
   });
 
   final String id;
   final String fullName;
   final String? phoneNumber;
   final String? email;
+  final String? gender;
+  final String? address;
+  final DateTime? dateOfBirth;
+  final String? emergencyContact;
+  final String? profileImage;
+  final Map<String, dynamic>? account;
   final String status;
 
   factory MemberProfile.fromJson(Map<String, dynamic> json) {
@@ -31,8 +45,31 @@ class MemberProfile {
       fullName: json['fullName']?.toString() ?? '',
       phoneNumber: _toString(json['phoneNumber']),
       email: _toString(json['email']),
+      gender: _toString(json['gender']),
+      address: _toString(json['address']),
+      dateOfBirth: _toDate(json['dateOfBirth']),
+      emergencyContact: _toString(json['emergencyContact']),
+      profileImage: _toString(json['profileImage']),
+      account: json['account'] is Map<String, dynamic>
+          ? json['account'] as Map<String, dynamic>
+          : null,
       status: json['status']?.toString() ?? '',
     );
+  }
+
+  Map<String, dynamic> toUpdateJson() {
+    return {
+      'fullName': fullName,
+      if (phoneNumber != null) 'phoneNumber': phoneNumber,
+      if (email != null) 'email': email,
+      if (gender != null) 'gender': gender,
+      if (address != null) 'address': address,
+      if (dateOfBirth != null)
+        'dateOfBirth':
+            '${dateOfBirth!.year}-${dateOfBirth!.month.toString().padLeft(2, '0')}-${dateOfBirth!.day.toString().padLeft(2, '0')}',
+      if (emergencyContact != null) 'emergencyContact': emergencyContact,
+      if (profileImage != null) 'profileImage': profileImage,
+    };
   }
 }
 
@@ -259,6 +296,180 @@ class MemberDashboard {
           .whereType<Map<String, dynamic>>()
           .map(MemberNotification.fromJson)
           .toList(),
+    );
+  }
+}
+
+int _toInt(dynamic value) {
+  if (value is num) return value.toInt();
+  return int.tryParse(value?.toString() ?? '') ?? 0;
+}
+
+class MemberAttendanceRecord {
+  const MemberAttendanceRecord({
+    required this.id,
+    required this.memberId,
+    required this.method,
+    required this.status,
+    this.checkInDate,
+    this.createdAt,
+  });
+
+  final String id;
+  final String memberId;
+  final DateTime? checkInDate;
+  final String method;
+  final String status;
+  final DateTime? createdAt;
+
+  factory MemberAttendanceRecord.fromJson(Map<String, dynamic> json) {
+    return MemberAttendanceRecord(
+      id: json['id']?.toString() ?? '',
+      memberId: json['memberId']?.toString() ?? '',
+      checkInDate: _toDate(json['checkInDate']),
+      method: json['method']?.toString() ?? '',
+      status: json['status']?.toString() ?? '',
+      createdAt: _toDate(json['createdAt']),
+    );
+  }
+}
+
+class MemberAttendanceSummary {
+  const MemberAttendanceSummary({
+    required this.total,
+    required this.present,
+    required this.cancelled,
+    this.lastCheckIn,
+  });
+
+  final int total;
+  final int present;
+  final int cancelled;
+  final DateTime? lastCheckIn;
+
+  factory MemberAttendanceSummary.fromJson(Map<String, dynamic> json) {
+    return MemberAttendanceSummary(
+      total: _toInt(json['total']),
+      present: _toInt(json['present']),
+      cancelled: _toInt(json['cancelled']),
+      lastCheckIn: _toDate(json['lastCheckIn']),
+    );
+  }
+}
+
+class MemberAttendance {
+  const MemberAttendance({required this.summary, required this.records});
+
+  final MemberAttendanceSummary summary;
+  final List<MemberAttendanceRecord> records;
+
+  factory MemberAttendance.fromJson(Map<String, dynamic> json) {
+    return MemberAttendance(
+      summary: MemberAttendanceSummary.fromJson(
+        json['summary'] as Map<String, dynamic>? ?? const {},
+      ),
+      records: (json['attendance'] as List? ?? [])
+          .whereType<Map<String, dynamic>>()
+          .map(MemberAttendanceRecord.fromJson)
+          .toList(),
+    );
+  }
+}
+
+class MemberProgress {
+  const MemberProgress({
+    this.subscription,
+    required this.attendance,
+    required this.training,
+  });
+
+  final MemberSubscription? subscription;
+  final MemberProgressAttendance attendance;
+  final MemberProgressTraining training;
+
+  factory MemberProgress.fromJson(Map<String, dynamic> json) {
+    final progress = json['progress'] as Map<String, dynamic>? ?? json;
+    final subscriptionJson = progress['subscription'];
+
+    return MemberProgress(
+      subscription: subscriptionJson is Map<String, dynamic>
+          ? MemberSubscription.fromJson(subscriptionJson)
+          : null,
+      attendance: MemberProgressAttendance.fromJson(
+        progress['attendance'] as Map<String, dynamic>? ?? const {},
+      ),
+      training: MemberProgressTraining.fromJson(
+        progress['training'] as Map<String, dynamic>? ?? const {},
+      ),
+    );
+  }
+}
+
+class MemberProgressAttendance {
+  const MemberProgressAttendance({
+    required this.totalPresent,
+    required this.presentInRange,
+    required this.presentThisMonth,
+    required this.rangeDays,
+    this.lastCheckIn,
+  });
+
+  final int totalPresent;
+  final int presentInRange;
+  final int presentThisMonth;
+  final int rangeDays;
+  final MemberAttendanceRecord? lastCheckIn;
+
+  factory MemberProgressAttendance.fromJson(Map<String, dynamic> json) {
+    final lastCheckInJson = json['lastCheckIn'];
+
+    return MemberProgressAttendance(
+      totalPresent: _toInt(json['totalPresent']),
+      presentInRange: _toInt(json['presentInRange']),
+      presentThisMonth: _toInt(json['presentThisMonth']),
+      rangeDays: _toInt(json['rangeDays']),
+      lastCheckIn: lastCheckInJson is Map<String, dynamic>
+          ? MemberAttendanceRecord.fromJson(lastCheckInJson)
+          : null,
+    );
+  }
+}
+
+class MemberProgressTraining {
+  const MemberProgressTraining({
+    required this.activeWorkouts,
+    required this.totalSchedules,
+    required this.completedSchedules,
+    required this.upcomingSchedules,
+    required this.missedSchedules,
+    required this.cancelledSchedules,
+    required this.completionRate,
+    this.recentCompletedSchedules = const [],
+  });
+
+  final int activeWorkouts;
+  final int totalSchedules;
+  final int completedSchedules;
+  final int upcomingSchedules;
+  final int missedSchedules;
+  final int cancelledSchedules;
+  final int completionRate;
+  final List<TrainingSchedule> recentCompletedSchedules;
+
+  factory MemberProgressTraining.fromJson(Map<String, dynamic> json) {
+    return MemberProgressTraining(
+      activeWorkouts: _toInt(json['activeWorkouts']),
+      totalSchedules: _toInt(json['totalSchedules']),
+      completedSchedules: _toInt(json['completedSchedules']),
+      upcomingSchedules: _toInt(json['upcomingSchedules']),
+      missedSchedules: _toInt(json['missedSchedules']),
+      cancelledSchedules: _toInt(json['cancelledSchedules']),
+      completionRate: _toInt(json['completionRate']),
+      recentCompletedSchedules:
+          (json['recentCompletedSchedules'] as List? ?? [])
+              .whereType<Map<String, dynamic>>()
+              .map(TrainingSchedule.fromJson)
+              .toList(),
     );
   }
 }
